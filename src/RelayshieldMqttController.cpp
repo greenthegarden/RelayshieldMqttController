@@ -91,8 +91,8 @@ void callback(char* topic, uint8_t* payload, unsigned int payloadLength)
       DEBUG_LOG(1, "separator: ");
       DEBUG_LOG(1, separator);
       if (separator != 0) {
-        byte relayIdx = atoi(message) - 1;
-        if (relayIdx <= ARRAY_SIZE(relays)) {
+        byte relayIdx = atoi(message) - 1;  // relay numbers in message from 1 to 4
+        if (relayIdx < ARRAY_SIZE(relays)) {
           DEBUG_LOG(1, "relayIdx: ");
           DEBUG_LOG(1, relayIdx);
           ++separator;
@@ -134,7 +134,7 @@ void setup()
     for (;;)
       ;
   }
-  
+
   // Connect to MQTT client
   if (mqttClient.connected()) {
     status_led_blink(4);
@@ -174,4 +174,3 @@ void loop()
   }
 
 }
-
