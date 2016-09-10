@@ -1,0 +1,38 @@
+Group     gRelayshield
+
+Switch    RelayshieldDiscovered           "On Network"                                     (gRelayshield)  {nh="192.168.2.90"}
+
+// input values from Powerhub
+String    RelayshieldRelayState           "[%s]"                                           (gRelayshield)  {mqtt="<[openhab:relayshield/status/relay:state:default]"}
+
+// relay control messages to Relayduino
+String    RelayshieldRelayControl         "[%s]"                                           (gRelayshield)  {mqtt=">[openhab:relayshield/control/relay:command:*:default]"}
+
+// relay states
+Switch    RelayshieldRelay1State          "Relay 1 Running"                                (gRelayshield)
+DateTime  RelayshieldRelay1LastOn         "Last on [%1$tT, %1$td.%1$tm.%1$tY]"
+DateTime  RelayshieldRelay1LastOff        "Last off [%1$tT, %1$td.%1$tm.%1$tY]"
+
+Switch    RelayshieldRelay2State          "Relay 2 Running"                                (gRelayshield)
+DateTime  RelayshieldRelay2LastOn         "Last on [%1$tT, %1$td.%1$tm.%1$tY]"
+DateTime  RelayshieldRelay2LastOff        "Last off [%1$tT, %1$td.%1$tm.%1$tY]"
+
+Switch    RelayshieldRelay3State          "Relay 3 Running"                                (gRelayshield)
+DateTime  RelayshieldRelay3LastOn         "Last on [%1$tT, %1$td.%1$tm.%1$tY]"
+DateTime  RelayshieldRelay3LastOff        "Last off [%1$tT, %1$td.%1$tm.%1$tY]"
+
+Switch    RelayshieldRelay4State          "Relay 4 Running"                                (gRelayshield)
+DateTime  RelayshieldRelay4LastOn         "Last on [%1$tT, %1$td.%1$tm.%1$tY]"
+DateTime  RelayshieldRelay4LastOff        "Last off [%1$tT, %1$td.%1$tm.%1$tY]"
+
+//Group     gRelayshieldEvents
+//String    gRelayshieldCommandEventName1   "Event [%s]"                         <calendar>  (gRelayshieldEvents)  {caldavPersonal="calendar:openhab type:EVENT eventNr:1 value:NAME"}
+////String   gRelayshieldCommandEventDesc1  "Description [%s]"                   <calendar>  (gRelayshieldEvents)  {caldavPersonal="calendar:openhab type:EVENT eventNr:1 value:DESCRIPTION"}
+////String   gRelayshieldCommandEventPlace1 "Place [%s]"                         <calendar>  (gRelayshieldEvents)  {caldavPersonal="calendar:openhab type:EVENT eventNr:1 value:PLACE"}
+//DateTime  gRelayshieldCommandEventStart1  "Start [%1$tT, %1$td.%1$tm.%1$tY]"   <calendar>  (gRelayshieldEvents)  {caldavPersonal="calendar:openhab type:EVENT eventNr:1 value:START"}
+////DateTime gRelayshieldCommandEventEnd1   "End [%1$tT, %1$td.%1$tm.%1$tY]"     <calendar>  (gRelayshieldEvents)  {caldavPersonal="calendar:openhab type:EVENT eventNr:1 value:END"}
+////String   gRelayshieldCommandEventTime1  "Time [%s]"                          <calendar>  (gRelayshieldEvents)  {caldavPersonal="calendar:openhab type:EVENT eventNr:1 value:TIME"}
+//String    gRelayshieldCommandEventNT1     "Event [%s]"                         <calendar>  (gRelayshieldEvents)  {caldavPersonal="calendar:openhab type:EVENT eventNr:1 value:NAMEANDTIME"}
+//String    gRelayshieldCommandEventName2   "Event [%s]"                         <calendar>  (gRelayshieldEvents)  {caldavPersonal="calendar:openhab type:EVENT eventNr:2 value:NAME"}
+//DateTime  gRelayshieldCommandEventTime2   "Begin [%1$tT, %1$td.%1$tm.%1$tY]"   <calendar>  (gRelayshieldEvents)  {caldavPersonal="calendar:openhab type:EVENT eventNr:2 value:START"}
+//String    gRelayshieldCommandEventNT2     "Event [%s]"                         <calendar>  (gRelayshieldEvents)  {caldavPersonal="calendar:openhab type:EVENT eventNr:2 value:NAMEANDTIME"}

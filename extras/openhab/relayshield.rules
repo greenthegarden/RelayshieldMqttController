@@ -1,0 +1,120 @@
+import org.openhab.core.library.types.*
+//import org.openhab.core.library.items.*
+import org.openhab.core.persistence.*
+import org.openhab.model.script.actions.*
+
+import org.joda.time.*
+
+/* TODO:
+ * Fix that requests from Caldav do not get delayed if another task is running
+ */
+
+//var java.util.concurrent.locks.ReentrantLock lock = new java.util.concurrent.locks.ReentrantLock()
+
+
+rule "Relayshield Relay State"
+when
+	Item RelayshieldRelayState changed
+then
+//	lock.lock()
+//    try {
+    	logInfo("relayshield", "RelayshieldRelayState state changed. RelayshieldRelayState.state: [{}].", RelayshieldRelayState.state)
+
+		val String[] messageParts = RelayshieldRelayState.state.toString.split(",");
+		val String relay = messageParts.get(0);
+		val String state = messageParts.get(1);
+
+		if (state == "0") {		// relay turned off
+			logInfo("relayshield", "relay turned off")
+			if (relay == "1") {
+				logInfo("relayshield", "relay 1 off")
+				RelayshieldRelay1State.sendCommand(OFF)
+			}
+			if (relay == "2") {
+				logInfo("relayshield", "relay 2 off")
+				RelayshieldRelay2State.sendCommand(OFF)
+			}
+			if (relay == "3") {
+				logInfo("relayshield", "relay 3 off")
+				RelayshieldRelay3State.sendCommand(OFF)
+			}
+			if (relay == "4") {
+				logInfo("relayshield", "relay 4 off")
+				RelayshieldRelay4State.sendCommand(OFF)
+			}
+		} else {		// relay was turned on
+			logInfo("relayshield", "relay turned on")
+			if (relay == "1") {
+				logInfo("relayshield", "relay 1 on")
+				RelayshieldRelay1State.sendCommand(ON)
+			}
+			if (relay == "2") {
+				logInfo("relayshield", "relay 2 on")
+				RelayshieldRelay2State.sendCommand(ON)
+			}
+			if (relay == "3") {
+				logInfo("relayshield", "relay 3 on")
+				RelayshieldRelay3State.sendCommand(ON)
+			}
+			if (relay == "4") {
+				logInfo("relayshield", "relay 4 on")
+				RelayshieldRelay4State.sendCommand(ON)
+			}
+		}
+//	} finally {
+//	   	lock.unlock()
+//	}
+end
+
+rule "Records last relay 1 on and off times"
+when
+  Item RelayshieldRelay1State received command
+then
+	if (receivedCommand == ON) {
+  		postUpdate(RelayshieldRelay1LastOn, new DateTimeType())
+  		RelayshieldRelayControl.sendCommand("1,1")
+  	} else {
+  		postUpdate(RelayshieldRelay1LastOff, new DateTimeType())
+  		RelayshieldRelayControl.sendCommand("1,0")
+  	}
+end
+
+rule "Records last relay 2 on and off times"
+when
+  Item RelayshieldRelay2State received command
+then
+	if (receivedCommand == ON) {
+  		postUpdate(RelayshieldRelay2LastOn, new DateTimeType())
+  		RelayshieldRelayControl.sendCommand("2,1")
+  	} else {
+  		postUpdate(RelayshieldRelay2LastOff, new DateTimeType())
+  		RelayshieldRelayControl.sendCommand("2,0")
+  	}
+end
+
+rule "Records last relay 3 on and off times"
+when
+  Item RelayshieldRelay3State received command
+then
+	if (receivedCommand == ON) {
+  		postUpdate(RelayshieldRelay3LastOn, new DateTimeType())
+  		RelayshieldRelayControl.sendCommand("3,1")
+  	} else {
+  		postUpdate(RelayshieldRelay3LastOff, new DateTimeType())
+  		RelayshieldRelayControl.sendCommand("3,0")
+  		
+  	}
+end
+
+rule "Records last relay 4 on and off times"
+when
+  Item RelayshieldRelay4State received command
+then
+	if (receivedCommand == ON) {
+  		postUpdate(RelayshieldRelay4LastOn, new DateTimeType())
+  		RelayshieldRelayControl.sendCommand("4,1")
+  	} else {
+  		postUpdate(RelayshieldRelay4LastOff, new DateTimeType())
+  		RelayshieldRelayControl.sendCommand("4,0")
+  	}
+end
