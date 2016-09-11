@@ -131,6 +131,7 @@ void setup()
     status_led_blink(2);
   } else {
     DEBUG_LOG(1, "Ethernet failed");
+    DEBUG_LOG(1, "Halting");
     status_led_blink(3);
     for (;;)
       ;
