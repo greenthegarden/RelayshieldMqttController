@@ -29,7 +29,7 @@ byte ethernet_init()
     delay(NETWORK_STARTUP_DELAY);
 //    return 1;
 //  }
-  return 0;
+  return 1;
 }
 
 
