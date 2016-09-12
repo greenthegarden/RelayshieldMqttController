@@ -148,10 +148,13 @@ void publish_memory() {
   mqttClient.publish(topicBuffer, itoa(getFreeMemory(), payloadBuffer, 10));
 }
 
-void publish_status() {
+void publish_configuration() {
   publish_version();
   publish_status_interval();
   publish_ip_address();
+}
+
+void publish_status() {
   publish_uptime();
   publish_memory();
 }

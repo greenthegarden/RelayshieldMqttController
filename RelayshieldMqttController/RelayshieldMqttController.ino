@@ -7,6 +7,7 @@ boolean mqtt_connect()
     DEBUG_LOG(1, "  connected");
     // Once connected, publish an announcement ...
     publish_connected();
+    publish_configuration();
     publish_status();
     // ... and subscribe to topics (should have list)
     mqttClient.subscribe("relayshield/control/#");
