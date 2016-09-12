@@ -52,6 +52,8 @@ typedef enum {
 
 // Status topics
 const char CONNECTED_STATUS[]  PROGMEM = "relayshield/status/connected";
+const char VERSION_STATUS[]    PROGMEM = "relayshield/status/version";
+const char INTERVAL_STATUS[]   PROGMEM = "relayshield/status/interval";
 const char IP_ADDR_STATUS[]    PROGMEM = "relayshield/status/ip_addr";
 const char UPTIME_STATUS[]     PROGMEM = "relayshield/status/uptime";
 const char MEMORY_STATUS[]     PROGMEM = "relayshield/status/memory";
@@ -60,23 +62,27 @@ const char ALARM_STATUS[]      PROGMEM = "relayshield/status/alarm";
 const char RELAY_STATUS[]      PROGMEM = "relayshield/status/relay";
 
 PGM_P const STATUS_TOPICS[]    PROGMEM = { CONNECTED_STATUS,    // idx = 0
-                                           IP_ADDR_STATUS,      // idx = 1
-                                           UPTIME_STATUS,       // idx = 2
-                                           MEMORY_STATUS,       // idx = 3
-                                           TIME_STATUS,         // idx = 4
-                                           ALARM_STATUS,        // idx = 5
-                                           RELAY_STATUS,        // idx = 6
+                                           VERSION_STATUS,      // idx = 1
+                                           INTERVAL_STATUS,     // idx = 2
+                                           IP_ADDR_STATUS,      // idx = 3
+                                           UPTIME_STATUS,       // idx = 4
+                                           MEMORY_STATUS,       // idx = 5
+                                           TIME_STATUS,         // idx = 6
+                                           ALARM_STATUS,        // idx = 7
+                                           RELAY_STATUS,        // idx = 8
                                          };
 
 /* STATUS_TOPICS indices, must match table above */
 typedef enum {
   CONNECTED_STATUS_IDX  = 0,
-  IP_ADDR_STATUS_IDX    = 1,
-  UPTIME_STATUS_IDX     = 2,
-  MEMORY_STATUS_IDX     = 3,
-  TIME_STATUS_IDX       = 4,
-  ALARM_STATUS_IDX      = 5,
-  RELAY_STATUS_IDX      = 6,
+  VERSION_STATUS_IDX    = 1,
+  INTERVAL_STATUS_IDX   = 2,
+  IP_ADDR_STATUS_IDX    = 3,
+  UPTIME_STATUS_IDX     = 4,
+  MEMORY_STATUS_IDX     = 5,
+  TIME_STATUS_IDX       = 6,
+  ALARM_STATUS_IDX      = 7,
+  RELAY_STATUS_IDX      = 8,
 } status_topics;
 
 // Control topics
@@ -96,6 +102,21 @@ void publish_connected() {
   payloadBuffer[0] = '\0';
   strcpy_P(payloadBuffer, (char*)pgm_read_word(&(MQTT_PAYLOADS[MQTT_PAYLOAD_CONNECTED_IDX])));
   mqttClient.publish(topicBuffer, payloadBuffer);
+}
+
+void publish_version() {
+  topicBuffer[0] = '\0';
+  strcpy_P(topicBuffer, (char*)pgm_read_word(&(STATUS_TOPICS[VERSION_STATUS_IDX])));
+  payloadBuffer[0] = '\0';
+  sprintf(payloadBuffer, "%i.%i", VERSION_MAJOR, VERSION_MINOR);
+  mqttClient.publish(topicBuffer, payloadBuffer);
+}
+
+void publish_status_interval() {
+  topicBuffer[0] = '\0';
+  strcpy_P(topicBuffer, (char*)pgm_read_word(&(STATUS_TOPICS[INTERVAL_STATUS_IDX])));
+  payloadBuffer[0] = '\0';
+  mqttClient.publish(topicBuffer, ltoa(STATUS_UPDATE_INTERVAL, payloadBuffer, 10));
 }
 
 void publish_ip_address() {
@@ -128,6 +149,8 @@ void publish_memory() {
 }
 
 void publish_status() {
+  publish_version();
+  publish_status_interval();
   publish_ip_address();
   publish_uptime();
   publish_memory();

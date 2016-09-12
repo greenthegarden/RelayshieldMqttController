@@ -4,6 +4,9 @@
 
 #include "debug.h"
 
+#define VERSION_MAJOR 3
+#define VERSION_MINOR 1
+
 // external libraries
 #include <MemoryFree.h>
 
@@ -19,12 +22,12 @@ const byte BUFFER_SIZE            = 32;
 char topicBuffer[BUFFER_SIZE];
 char payloadBuffer[BUFFER_SIZE];
 
+const unsigned long STATUS_UPDATE_INTERVAL = 5UL * 60UL *1000UL;  // 5 minutes
+unsigned long statusPreviousMillis = 0UL;
+
 #include "ethernetConfig.h"
 #include "mqttConfig.h"
 #include "relayConfig.h"
-
-const unsigned long STATUS_UPDATE_INTERVAL = 10000UL;
-unsigned long statusPreviousMillis = 0UL;
 
 const byte STATUS_LED_CONTROL_PIN = 13;
 
