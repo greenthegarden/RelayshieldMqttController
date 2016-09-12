@@ -51,7 +51,7 @@ typedef enum {
 } mqtt_payloads;
 
 // Status topics
-const char CONNECTED_STATUS[]  PROGMEM = "relayshield/status/connected";
+const char MQTT_STATUS[]       PROGMEM = "relayshield/status/mqtt";
 const char VERSION_STATUS[]    PROGMEM = "relayshield/status/version";
 const char INTERVAL_STATUS[]   PROGMEM = "relayshield/status/interval";
 const char IP_ADDR_STATUS[]    PROGMEM = "relayshield/status/ip_addr";
@@ -61,7 +61,7 @@ const char TIME_STATUS[]       PROGMEM = "relayshield/status/time";
 const char ALARM_STATUS[]      PROGMEM = "relayshield/status/alarm";
 const char RELAY_STATUS[]      PROGMEM = "relayshield/status/relay";
 
-PGM_P const STATUS_TOPICS[]    PROGMEM = { CONNECTED_STATUS,    // idx = 0
+PGM_P const STATUS_TOPICS[]    PROGMEM = { MQTT_STATUS,         // idx = 0
                                            VERSION_STATUS,      // idx = 1
                                            INTERVAL_STATUS,     // idx = 2
                                            IP_ADDR_STATUS,      // idx = 3
@@ -74,7 +74,7 @@ PGM_P const STATUS_TOPICS[]    PROGMEM = { CONNECTED_STATUS,    // idx = 0
 
 /* STATUS_TOPICS indices, must match table above */
 typedef enum {
-  CONNECTED_STATUS_IDX  = 0,
+  MQTT_STATUS_IDX       = 0,
   VERSION_STATUS_IDX    = 1,
   INTERVAL_STATUS_IDX   = 2,
   IP_ADDR_STATUS_IDX    = 3,
@@ -98,7 +98,7 @@ typedef enum {
 
 void publish_connected() {
   topicBuffer[0] = '\0';
-  strcpy_P(topicBuffer, (char*)pgm_read_word(&(STATUS_TOPICS[CONNECTED_STATUS_IDX])));
+  strcpy_P(topicBuffer, (char*)pgm_read_word(&(STATUS_TOPICS[MQTT_STATUS_IDX])));
   payloadBuffer[0] = '\0';
   strcpy_P(payloadBuffer, (char*)pgm_read_word(&(MQTT_PAYLOADS[MQTT_PAYLOAD_CONNECTED_IDX])));
   mqttClient.publish(topicBuffer, payloadBuffer);
