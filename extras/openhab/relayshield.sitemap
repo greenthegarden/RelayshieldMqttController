@@ -1,13 +1,18 @@
 sitemap relayshield label="Relayshield Controller"
 {
-	Frame {
-		Switch item=RelayshieldDiscovered
+	Frame label="Configuration" {
+		Text item=RelayshieldConnected
+		Text item=RelayshieldCodeVersion
+		Text item=RelayshieldStatusInterval
+		Text item=RelayshieldIpAddress
 	}
-//	Frame label="Schedule" { //visibility=[RelayshieldDiscovered==ON] {
-//		Text item=gRelayshieldCommandEventNT1
-//		Text item=gRelayshieldCommandEventNT2
-//	}
-	Frame label="Relays" { //visibility=[RelayshieldDiscovered==ON] {
+	Frame label="State" {
+		Text item=RelayshieldUptime
+		Text item=RelayshieldMemory
+		Text item=RelayshieldLastStatusUpdate
+		Switch item=RelayshieldState
+	}
+	Frame label="Relays" visibility=[RelayshieldState==ON] {
 		Switch item=RelayshieldRelay1State
 		Text item=RelayshieldRelay1LastOn
 		Text item=RelayshieldRelay1LastOff

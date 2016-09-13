@@ -12,6 +12,45 @@ import org.joda.time.*
 //var java.util.concurrent.locks.ReentrantLock lock = new java.util.concurrent.locks.ReentrantLock()
 
 
+var int relayshieldUpdateAge = 5	// minutes
+
+rule "Last connected timestamp"
+when
+	Item RelayshieldConnectedMessage received update
+then
+	RelayshieldConnected.postUpdate(new DateTimeType)
+end
+
+rule "Update status interval"
+when
+	Item RelayshieldStatusInterval changed
+then
+	var Number newUpdateAge = RelayshieldStatusInterval.state as DecimalType
+	relayshieldUpdateAge = (newUpdateAge / 60000).intValue	// convert to minutes and update
+end
+
+rule "Status update timestamp"
+when
+	Item RelayshieldUptime received update
+then
+	RelayshieldLastStatusUpdate.postUpdate(new DateTimeType)
+end
+
+rule "Relayshield connected"
+when
+	// update every minute
+	Time cron "0 0/1 * * * ?"
+then
+	var DateTime dateTime = new DateTime((RelayshieldLastStatusUpdate.state as DateTimeType).calendar.timeInMillis)
+	if (dateTime.plusMinutes(relayshieldUpdateAge+1).isBefore(now)) {
+		// is more than <updateAge> minutes old
+  		RelayshieldState.sendCommand(OFF)
+	} else {
+		// is less than <updateAge> minutes old
+		RelayshieldState.sendCommand(ON)
+	}
+end
+
 rule "Relayshield Relay State"
 when
 	Item RelayshieldRelayState changed
