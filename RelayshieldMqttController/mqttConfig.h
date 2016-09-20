@@ -8,10 +8,10 @@
 // MQTT parameters
 //IPAddress mqttServerAddr(192, 168, 1, 50);        // openHAB
 IPAddress mqttServerAddr(192, 168, 2, 90);        // emonPi
-const char mqttClientId[]                         = "relayshield";
-const char mqttUsername[]                         = "emonpi";
-const char mqttPassword[]                         = "emonpimqtt2016";
-const int mqttPort                                = 1883;
+const char MQTT_CLIENT_ID[]                       = "relayshield";
+const char MQTT_USERNAME[]                        = "emonpi";
+const char MQTT_PASSWORD[]                        = "emonpimqtt2016";
+const int MQTT_PORT                               = 1883;
 
 unsigned long lastReconnectAttempt                = 0UL;
 const unsigned long RECONNECTION_ATTEMPT_INTERVAL = 5000UL;
@@ -23,7 +23,7 @@ const char COMMAND_SEPARATOR                      = ',';
 // callback function definition
 void callback(char* topic, uint8_t* payload, unsigned int length);
 
-PubSubClient mqttClient(mqttServerAddr, mqttPort, callback, ethernetClient);
+PubSubClient mqttClient(mqttServerAddr, MQTT_PORT, callback, ethernetClient);
 
 // MQTT topic definitions
 
