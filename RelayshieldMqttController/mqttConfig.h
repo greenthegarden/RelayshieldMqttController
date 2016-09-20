@@ -6,8 +6,11 @@
 
 
 // MQTT parameters
-IPAddress mqttServerAddr(192, 168, 1, 50);        // openHAB
+//IPAddress mqttServerAddr(192, 168, 1, 50);        // openHAB
+IPAddress mqttServerAddr(192, 168, 2, 90);        // emonPi
 const char mqttClientId[]                         = "relayshield";
+const char mqttUsername[]                         = "emonpi";
+const char mqttPassword[]                         = "emonpimqtt2016";
 const int mqttPort                                = 1883;
 
 unsigned long lastReconnectAttempt                = 0UL;

@@ -3,7 +3,7 @@
 boolean mqtt_connect()
 {
   DEBUG_LOG(1, "Attempting MQTT connection ...");
-  if (mqttClient.connect(mqttClientId)) {
+  if (mqttClient.connect(mqttClientId, mqttUsername, mqttPassword)) {
     DEBUG_LOG(1, "  connected");
     // Once connected, publish an announcement ...
     publish_connected();
