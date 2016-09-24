@@ -1,24 +1,24 @@
 Group     gRelayshield
 
-String    RelayshieldConnectedMessage     "[%s]"                                           (gRelayshield)  {mqtt="<[openhab:relayshield/status/mqtt:state:default]"}
+String    RelayshieldConnectedMessage     "[%s]"                                           (gRelayshield)  {mqtt="<[emonpi:relayshield/status/mqtt:state:default]"}
 DateTime  RelayshieldConnected            "Connected [%1$tT, %1$td.%1$tm.%1$tY]"
 
 // configuration items
-String    RelayshieldCodeVersion          "Code Version [%s]"                              (gRelayshield)  {mqtt="<[openhab:relayshield/status/version:state:default]"}
-Number    RelayshieldStatusInterval       "Status Interval (mSecs) [%d]"                   (gRelayshield)  {mqtt="<[openhab:relayshield/status/interval:state:default]"}
-String    RelayshieldIpAddress            "IP [%s]"                                        (gRelayshield)  {mqtt="<[openhab:relayshield/status/ip_addr:state:default]"}
+String    RelayshieldCodeVersion          "Code Version [%s]"                              (gRelayshield)  {mqtt="<[emonpi:relayshield/status/version:state:default]"}
+Number    RelayshieldStatusInterval       "Status Interval (mSecs) [%d]"                   (gRelayshield)  {mqtt="<[emonpi:relayshield/status/interval:state:default]"}
+String    RelayshieldIpAddress            "IP [%s]"                                        (gRelayshield)  {mqtt="<[emonpi:relayshield/status/ip_addr:state:default]"}
 
 // status items
-Number    RelayshieldUptime               "Uptime (mSecs) [%d]"                            (gRelayshield)  {mqtt="<[openhab:relayshield/status/uptime:state:default]"}
-Number    RelayshieldMemory               "Memory (bytes) [%d]"                            (gRelayshield)  {mqtt="<[openhab:relayshield/status/memory:state:default]"}
+Number    RelayshieldUptime               "Uptime (mSecs) [%d]"                            (gRelayshield)  {mqtt="<[emonpi:relayshield/status/uptime:state:default]"}
+Number    RelayshieldMemory               "Memory (bytes) [%d]"                            (gRelayshield)  {mqtt="<[emonpi:relayshield/status/memory:state:default]"}
 DateTime  RelayshieldLastStatusUpdate     "Last Status Update [%1$tT, %1$td.%1$tm.%1$tY]"
 Switch    RelayshieldState                "Connected"                                      (gRelayshield)
 
 // input values from Powerhub
-String    RelayshieldRelayState           "[%s]"                                           (gRelayshield)  {mqtt="<[openhab:relayshield/status/relay:state:default]"}
+String    RelayshieldRelayState           "[%s]"                                           (gRelayshield)  {mqtt="<[emonpi:relayshield/status/relay:state:default]"}
 
 // relay control messages to Relayduino
-String    RelayshieldRelayControl         "[%s]"                                           (gRelayshield)  {mqtt=">[openhab:relayshield/control/relay:command:*:default]"}
+String    RelayshieldRelayControl         "[%s]"                                           (gRelayshield)  {mqtt=">[emonpi:relayshield/control/relay:command:*:default]"}
 
 // relay states
 Switch    RelayshieldRelay1State          "Relay 1 Running"                                (gRelayshield)

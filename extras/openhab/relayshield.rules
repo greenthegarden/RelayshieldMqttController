@@ -41,13 +41,17 @@ when
 	// update every minute
 	Time cron "0 0/1 * * * ?"
 then
-	var DateTime dateTime = new DateTime((RelayshieldLastStatusUpdate.state as DateTimeType).calendar.timeInMillis)
-	if (dateTime.plusMinutes(relayshieldUpdateAge+1).isBefore(now)) {
-		// is more than <updateAge> minutes old
-  		RelayshieldState.sendCommand(OFF)
+	if (RelayshieldLastStatusUpdate.state == Undefined || RelayshieldLastStatusUpdate.state == Uninitialized) {
+		logInfo("relayshield", "")
 	} else {
-		// is less than <updateAge> minutes old
-		RelayshieldState.sendCommand(ON)
+		var DateTime dateTime = new DateTime((RelayshieldLastStatusUpdate.state as DateTimeType).calendar.timeInMillis)
+		if (dateTime.plusMinutes(relayshieldUpdateAge+1).isBefore(now)) {
+			// is more than <updateAge> minutes old
+  			RelayshieldState.sendCommand(OFF)
+		} else {
+			// is less than <updateAge> minutes old
+			RelayshieldState.sendCommand(ON)
+		}
 	}
 end
 
