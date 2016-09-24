@@ -1,7 +1,6 @@
 #include "config.h"
 
-boolean mqtt_connect()
-{
+boolean mqtt_connect() {
   DEBUG_LOG(1, "Attempting MQTT connection ...");
   if (mqttClient.connect(MQTT_CLIENT_ID, MQTT_USERNAME, MQTT_PASSWORD)) {
     DEBUG_LOG(1, "  connected");
@@ -18,10 +17,10 @@ boolean mqtt_connect()
   return mqttClient.connected();
 }
 
-void callback(char* topic, uint8_t* payload, unsigned int payloadLength)
-{
+void callback(char *topic, uint8_t *payload, unsigned int payloadLength) {
   // handle message arrived
-  /* topic = part of the variable header:has topic name of the topic where the publish received
+  /* topic = part of the variable header:has topic name of the topic where the
+     publish received
        NOTE: variable header does not contain the 2 bytes with the
             publish msg ID
       payload = pointer to the first item of the buffer array that
@@ -34,9 +33,11 @@ void callback(char* topic, uint8_t* payload, unsigned int payloadLength)
   DEBUG_LOG(1, payloadLength);
 
   // Copy the payload to the new buffer
-  char* message = (char*)malloc((sizeof(char) * payloadLength) + 1); // get the size of the bytes and store in memory
-  memcpy(message, payload, payloadLength * sizeof(char));        // copy the memory
-  message[payloadLength * sizeof(char)] = '\0';                  // add terminating character
+  char *message =
+      (char *)malloc((sizeof(char) * payloadLength) +
+                     1); // get the size of the bytes and store in memory
+  memcpy(message, payload, payloadLength * sizeof(char)); // copy the memory
+  message[payloadLength * sizeof(char)] = '\0'; // add terminating character
 
   DEBUG_LOG(1, "Message with topic");
   DEBUG_LOG(1, topic);
@@ -61,39 +62,16 @@ void callback(char* topic, uint8_t* payload, unsigned int payloadLength)
   if (controlTopicFound) {
     DEBUG_LOG(1, "Control topic index");
     DEBUG_LOG(1, topicIdx);
-    //switch to case statements
-    if (topicIdx == RELAY_CONTROL_IDX) {  // topic is RELAY_CONTROL
+    // switch to case statements
+    if (topicIdx == RELAY_CONTROL_IDX) { // topic is RELAY_CONTROL
       DEBUG_LOG(1, "RELAY_CONTROL topic arrived");
 
-      /*
-              // message is expected to be in format "relay,state,duration"
-              // switch given relay to given state for the given duration
-              // get relay and duration from message
-              // see http://arduino.stackexchange.com/questions/1013/how-do-i-split-an-incoming-string
-
-              // see http://arduino.stackexchange.com/questions/1013/how-do-i-split-an-incoming-string/1237
-              // int id1, id2, id3;
-              //  int pos1, pos2, pos3;
-              //  char* buf = "1:90&2:80&3:180";
-              //  int n = sscanf(buf, "%d:%d&%d:%d&%d:%d", &id1, &pos1, &id2, &pos2, &id3, &pos3);
-
-              byte relayIdx, state;
-              unsigned long duration;
-              int pos1, pos2, pos3;
-              int n = sscanf(message, "%d,%d,%d", relayIdx, &pos1, state, &pos2, duration, &pos3);
-
-              if (duration > 0)
-        //          relay_switch_to_state_with_timer(relayIdx, state, duration);
-                relay_switch_on(relayIdx, duration);
-              else
-                relay_switch_off(relayIdx);
-      */
-
-      char* separator = strchr(message, COMMAND_SEPARATOR);
+      char *separator = strchr(message, COMMAND_SEPARATOR);
       DEBUG_LOG(1, "separator: ");
       DEBUG_LOG(1, separator);
       if (separator != 0) {
-        byte relayIdx = atoi(message) - 1;  // relay numbers in message from 1 to 4
+        byte relayIdx =
+            atoi(message) - 1; // relay numbers in message from 1 to 4
         if (relayIdx < ARRAY_SIZE(relays)) {
           DEBUG_LOG(1, "relayIdx: ");
           DEBUG_LOG(1, relayIdx);
@@ -108,7 +86,7 @@ void callback(char* topic, uint8_t* payload, unsigned int payloadLength)
           }
         }
       }
-    } else {  // unknown control topic has arrived - ignore!!
+    } else { // unknown control topic has arrived - ignore!!
       DEBUG_LOG(1, "Unknown control topic arrived");
     }
   }
@@ -121,8 +99,7 @@ void callback(char* topic, uint8_t* payload, unsigned int payloadLength)
   setup()
   Called by the Arduino framework once, before the main loop begins
   --------------------------------------------------------------------------------------*/
-void setup()
-{
+void setup() {
 #if DEBUG_LEVEL > 0
   Serial.begin(BAUD_RATE);
 #endif
@@ -145,7 +122,8 @@ void setup()
     status_led_blink(5);
   }
 
-  // configure relay pins as outputs and set to off (where off depends on connection type)
+  // configure relay pins as outputs and set to off (where off depends on
+  // connection type)
   relays_init();
 }
 
@@ -153,8 +131,7 @@ void setup()
   loop()
   Arduino main loop
   --------------------------------------------------------------------------------------*/
-void loop()
-{
+void loop() {
   unsigned long now = millis();
 
   if (!mqttClient.connected()) {
@@ -182,5 +159,4 @@ void loop()
   if (!mqttClientConnected) {
     no_network_behaviour();
   }
-
 }

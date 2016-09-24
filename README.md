@@ -12,7 +12,7 @@ In addition, an MQTT broker is required to running and accessible from the Ardui
 
 The code makes use of the [NetEEPROM library](https://github.com/gregington/NetEEPROM) to configure the MAC address of the Ethernet hardware. See the examples for how to set a MAC address. Utilising the library means the MAC address does not need to be defined in the code, allowing an IP address to be assigned automatically without code changes to multiple boards (assuming a DHCP server is available on network).
 
-The MQTT broker address is required to be defined within the source code. Set the address on line 10 of file [mqttConfig.h](../RelayshieldMqttController/mqttConfig.h).
+The MQTT broker address is required to be defined within the source code. Set the address on line 10 of file [mqttConfig.h](RelayshieldMqttController/mqttConfig.h).
 
 ## Compiling code
 
@@ -62,7 +62,7 @@ where
 - `x` is the relay number (1 to 4)
 - `y` is either `0` or `1` to signifity whether the relay is off or on, respectively
 
-Other status messages are generated for reliability. See the file [mqttConfig.h](../RelayshieldMqttController/mqttConfig.h) for details.
+Other status messages are generated for reliability. See the file [mqttConfig.h](RelayshieldMqttController/mqttConfig.h) for details.
 
 ## Contact
 

@@ -12,11 +12,9 @@
 #ifndef __DEBUG_H__
 #define __DEBUG_H__
 
-
 #ifndef DEBUG_LEVEL
-#define DEBUG_LEVEL 1
+#define DEBUG_LEVEL 0
 #endif
-
 
 #if DEBUG_LEVEL == 0
 
@@ -27,13 +25,12 @@
 // TODO: Store strings in PROGMEM?
 // TODO: Modify so lower level messages/conditionals aren't compiled at all?
 
-#define DEBUG_LOG(level, message) \
-  if (DEBUG_LEVEL >= level) {\
-    Serial.print(F("DEBUG: "));\
-    Serial.println(message);\
+#define DEBUG_LOG(level, message)                                              \
+  if (DEBUG_LEVEL >= level) {                                                  \
+    Serial.print(F("DEBUG: "));                                                \
+    Serial.println(message);                                                   \
   };
 
 #endif
 
 #endif
-
