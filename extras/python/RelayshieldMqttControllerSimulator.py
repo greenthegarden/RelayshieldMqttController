@@ -7,6 +7,7 @@
 
 # see https://wiki.python.org/moin/ConfigParserShootout
 from configobj import ConfigObj
+
 config = ConfigObj('RelayshieldMqttController.cfg')
 
 print("{0}".format("Relayshield MQTT Controller"))
@@ -24,8 +25,8 @@ print("{0}".format("Relayshield MQTT Controller"))
 
 import paho.mqtt.client as mqtt
 
-# The callback for when the client receives a CONNACK response from the server.
 def on_connect(client, userdata, flags, rc) :
+	""" Callback for when the client receives a CONNACK response from the server. """
 	print("Connected with result code "+str(rc))
 	if (rc == 0) :
 		# Subscribing in on_connect() means that if the connection is lost
@@ -39,22 +40,27 @@ def on_connect(client, userdata, flags, rc) :
 		tidyupAndExit();
 
 def on_subscribe(client, userdata, mid, granted_qos) :
-    print("Subscribed: "+str(mid)+" "+str(granted_qos))
+	""" Callback for topic subscription. """
+	print("Subscribed: "+str(mid)+" "+str(granted_qos))
 
 def on_message(client, userdata, message) :
-    print("message received:\n{0}: {1}".format(message.topic, message.payload))
+	""" Callback for when MQTT message received. """
+	print("message received:\n{0}: {1}".format(message.topic, message.payload))
 
 def on_publish(client, userdata, mid) :
-    print("mid: {0}".format(str(mid)))
+	""" Callback for when MQTT message is published. """
+	print("mid: {0}".format(str(mid)))
 
 def on_disconnect(client, userdata, rc) :
+	"""" Callback for MQTT broker disconnection. """
 	print("Disconnect returned:")
 	print("client: {0}".format(str(client)))
 	print("userdata: {0}".format(str(userdata)))
 	print("result: {0}".format(str(rc)))
 
 def on_log(client, userdata, level, buf) :
-    print("{0}".format(buf))
+	""" Callback for MQTT logging. """
+	print("{0}".format(buf))
 
 client               = mqtt.Client()
 client.on_connect    = on_connect
@@ -86,21 +92,39 @@ client.loop_start()
 
 
 def tidyupAndExit() :
+	""" Stop program nicely """
 	running = False       #Stop thread1
 	# Disconnect mqtt client			mqttc.loop_stop()
 	client.disconnect()
 	print("Bye")
 	exit(0)
 
+def processInput() :
+	""" Process input from keyboard """
+	relay, state = raw_input("Enter relay and state in form <relay state>: ").split()
+	try :
+		int(relay)
+	except ValueError :
+		print("Please enter an integer for relay")
+		return
+	if not ( int(relay) in [1,2,3,4] ) :
+		print("Please ensure relay number is correct")
+		return
+	try :
+		int(state)
+	except ValueError :
+		print("Please enter an integer for state")
+		return
+	if not ( int(state) in [0,1] ) :
+		print("Ensure relay state is correct!!")
+		return
+	payload = relay + "," + state
+	client.publish("relayshield/control/relay", payload)
+	return
+
 # Loop continuously
 while True :
 	try :
-		relay, state = raw_input("Enter relay and state in form <relay state>: ").split()
-#		assert type(relay) is IntType, "relay is not an integer: %r" % relay
-		assert relay in ['1','2','3','4'], "relay is not valid: %r" % relay
-#		assert type(state) is IntType, "state is not an integer: %r" % state
-		assert state in ['0','1'], "state is not valid: %r" % state
-		payload = relay + "," + state
-		client.publish("relayshield/control/relay", payload)
+		processInput()
 	except KeyboardInterrupt :      #Triggered by pressing Ctrl+C
 		tidyupAndExit()

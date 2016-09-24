@@ -60,10 +60,10 @@ relayshield/status/relay
 and payload, in the format `x,y`, where
 
 - `x` is the relay number (1 to 4)
-- `y` is either `0` or `1` to signifity whether the relay is off or on, respectively
+- `y` is either `0` or `1` to signifity whether the relay is off or on, respectively.
 
 Other status messages are generated for reliability. See the file [mqttConfig.h](RelayshieldMqttController/mqttConfig.h) for details.
 
 ## Contact
 
-Please let me know if you have any comments of suggesions.
+Please let me know if you have any comments or suggesions.
