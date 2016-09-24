@@ -166,4 +166,4 @@ void publish_status() {
   publish_memory();
 }
 
-#endif /* RELAYDUINOMQTTCONTROLLER_MQTT_CONFIG_H_ */
+#endif /* RELAYSHIELDMQTTCONTROLLER_MQTT_CONFIG_H_ */
