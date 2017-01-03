@@ -8,7 +8,7 @@
 #endif
 
 // external libraries
-#include <MemoryFree.h>
+#include "MemoryFree.h"
 
 // Macros
 #define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
@@ -25,6 +25,7 @@ char payloadBuffer[BUFFER_SIZE];
 const unsigned long STATUS_UPDATE_INTERVAL = 5UL * 60UL * 1000UL; // 5 minutes
 unsigned long statusPreviousMillis = 0UL;
 
+// internal libraries
 #include "ethernetConfig.h"
 #include "mqttConfig.h"
 #include "relayConfig.h"
