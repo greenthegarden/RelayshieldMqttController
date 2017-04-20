@@ -106,6 +106,8 @@ void setup() {
   Serial.begin(BAUD_RATE);
 #endif
 
+  status_led_init();
+
   if (ethernet_init()) {
     DEBUG_LOG(1, "Ethernet configured");
     status_led_blink(2);
@@ -127,6 +129,9 @@ void setup() {
   // configure relay pins as outputs and set to off (where off depends on
   // connection type)
   relays_init();
+
+  // configure voltage reading
+  voltage_sensor_init();
 }
 
 /*--------------------------------------------------------------------------------------
@@ -155,6 +160,13 @@ void loop() {
     if (mqttClientConnected) {
       statusPreviousMillis = now;
       publish_status();
+    }
+  }
+
+  if (now - voltagePreviousMillis >= VOLTAGE_UPDATE_INTERVAL) {
+    if (mqttClientConnected) {
+      voltagePreviousMillis = now;
+      publish_voltage();
     }
   }
 

@@ -18,7 +18,7 @@ const byte RELAY_3_CONTROL_PIN = 5;  // Relay 3 is connected to Arduino Digital 
 const byte RELAY_4_CONTROL_PIN = 4;  // Relay 4 is connected to Arduino Digital 4
 
 /*
-// define relay connection types of 
+// define relay connection types of
 // NC - Normally Closed, in which case NC pin is connected with COM pin when control pin is set low and disconnected when control pin is high;
 // NO - Normally Open, in which case NO pin is disconnected with COM pin when control pin is set low and connected when control pin is high.
 typedef enum {
@@ -128,9 +128,8 @@ void relays_switch_on()
 
 // take into account NC, NO
 //relays_default_state() {
-//  for 
+//  for
 //}
 
 
 #endif   /* RELAYSHIELDMQTTCONTROLLER_RELAY_CONFIG_H_ */
-
