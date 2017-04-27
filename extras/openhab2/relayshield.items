@@ -1,0 +1,38 @@
+Group     gRelayshield
+
+String    RelayshieldConnectedMessage     "[%s]"                                           (gRelayshield)  {mqtt="<[emonpi:relayshield/status/mqtt:state:default]"}
+DateTime  RelayshieldConnected            "Connected [%1$tT, %1$td.%1$tm.%1$tY]"
+
+// configuration items
+String    RelayshieldCodeVersion          "Code Version [%s]"                              (gRelayshield)  {mqtt="<[emonpi:relayshield/status/version:state:default]"}
+Number    RelayshieldStatusInterval       "Status Interval (mSecs) [%d]"                   (gRelayshield)  {mqtt="<[emonpi:relayshield/status/interval:state:default]"}
+String    RelayshieldIpAddress            "IP [%s]"                                        (gRelayshield)  {mqtt="<[emonpi:relayshield/status/ip_addr:state:default]"}
+
+// status items
+Number    RelayshieldUptime               "Uptime (mSecs) [%d]"                            (gRelayshield)  {mqtt="<[emonpi:relayshield/status/uptime:state:default]"}
+Number    RelayshieldMemory               "Memory (bytes) [%d]"                            (gRelayshield)  {mqtt="<[emonpi:relayshield/status/memory:state:default]"}
+DateTime  RelayshieldLastStatusUpdate     "Last Status Update [%1$tT, %1$td.%1$tm.%1$tY]"
+Switch    RelayshieldState                "Connected"                                      (gRelayshield)
+
+// input values from Powerhub
+String    RelayshieldRelayState           "[%s]"                                           (gRelayshield)  {mqtt="<[emonpi:relayshield/status/relay:state:default]"}
+
+// relay control messages to Relayduino
+String    RelayshieldRelayControl         "[%s]"                                           (gRelayshield)  {mqtt=">[emonpi:relayshield/control/relay:command:*:default]"}
+
+// relay states
+Switch    RelayshieldRelay1State          "Relay 1 Running"                                (gRelayshield)
+DateTime  RelayshieldRelay1LastOn         "Last on [%1$tT, %1$td.%1$tm.%1$tY]"
+DateTime  RelayshieldRelay1LastOff        "Last off [%1$tT, %1$td.%1$tm.%1$tY]"
+
+Switch    RelayshieldRelay2State          "Relay 2 Running"                                (gRelayshield)
+DateTime  RelayshieldRelay2LastOn         "Last on [%1$tT, %1$td.%1$tm.%1$tY]"
+DateTime  RelayshieldRelay2LastOff        "Last off [%1$tT, %1$td.%1$tm.%1$tY]"
+
+Switch    RelayshieldRelay3State          "Relay 3 Running"                                (gRelayshield)
+DateTime  RelayshieldRelay3LastOn         "Last on [%1$tT, %1$td.%1$tm.%1$tY]"
+DateTime  RelayshieldRelay3LastOff        "Last off [%1$tT, %1$td.%1$tm.%1$tY]"
+
+Switch    RelayshieldRelay4State          "Relay 4 Running"                                (gRelayshield)
+DateTime  RelayshieldRelay4LastOn         "Last on [%1$tT, %1$td.%1$tm.%1$tY]"
+DateTime  RelayshieldRelay4LastOff        "Last off [%1$tT, %1$td.%1$tm.%1$tY]"
