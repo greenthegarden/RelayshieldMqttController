@@ -2,34 +2,29 @@
 #define RELAYSHIELDMQTTCONTROLLER_ETHERNET_CONFIG_H_
 
 
-// Use NetEEPROM library read MAC address from EEPROM
-#include <EEPROM.h>
 #include <SPI.h>
 #include <Ethernet.h>
-#include <NetEEPROM.h>
 
 
 const unsigned long NETWORK_STARTUP_DELAY = 1000UL;
 
 //const byte          ETHERNET_CS_PIN       = 10;
 
+byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
+
 EthernetClient ethernetClient;
 
-byte ethernet_init()
-{
+byte ethernet_init() {
   // Configure Ethernet
   delay(NETWORK_STARTUP_DELAY); // allow some time for Ethernet processor to come out of reset on Arduino power up:
 
-  //Ethernet.begin(mac);
-  NetEeprom.begin();
-//  if (NetEeprom.begin() == 0) {
-//    DEBUG_LOG(1, "IP failed");
-//  } else {
+//  NetEeprom.begin();
+  if (Ethernet.begin(mac) != 0) {
     DEBUG_LOG(1, Ethernet.localIP());
     delay(NETWORK_STARTUP_DELAY);
-//    return 1;
-//  }
-  return 1;
+    return 1;
+  }
+  return 0;
 }
 
 

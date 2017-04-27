@@ -3,10 +3,6 @@
 
 #include "debug.h"
 
-#ifndef VERSION
-#define VERSION 1.0
-#endif
-
 // external libraries
 #include "MemoryFree.h"
 
@@ -22,6 +18,8 @@ const byte BUFFER_SIZE = 32;
 char topicBuffer[BUFFER_SIZE];
 char payloadBuffer[BUFFER_SIZE];
 
+const byte FLOAT_DECIMAL_PLACES = 1;
+
 const unsigned long STATUS_UPDATE_INTERVAL = 5UL * 60UL * 1000UL; // 5 minutes
 unsigned long statusPreviousMillis = 0UL;
 
@@ -29,10 +27,17 @@ unsigned long statusPreviousMillis = 0UL;
 #include "ethernetConfig.h"
 #include "mqttConfig.h"
 #include "relayConfig.h"
+#include "voltageSensorConfig.h"
+#include "currentSensorConfig.h"
+
+void no_network_behaviour() { relays_switch_off(); }
 
 const byte STATUS_LED_CONTROL_PIN = 13;
 
-void no_network_behaviour() { relays_switch_off(); }
+void status_led_init() {
+  pinMode(STATUS_LED_CONTROL_PIN, OUTPUT);
+  digitalWrite(STATUS_LED_CONTROL_PIN, LOW);
+}
 
 const unsigned long LED_ON_DELAY = 1000UL;
 const unsigned long LED_OFF_DELAY = 500UL;

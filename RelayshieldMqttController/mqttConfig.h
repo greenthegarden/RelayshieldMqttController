@@ -5,9 +5,9 @@
 
 // MQTT parameters
 IPAddress mqttServerAddr(192, 168, 1, 52); // emonPi
-const char * MQTT_CLIENT_ID = "relayshield";
-const char * MQTT_USERNAME = "emonpi";
-const char * MQTT_PASSWORD = "emonpimqtt2016";
+const char* MQTT_CLIENT_ID = "relayshield";
+const char* MQTT_USERNAME = "emonpi";
+const char* MQTT_PASSWORD = "emonpimqtt2016";
 const int MQTT_PORT = 1883;
 
 unsigned long lastReconnectAttempt = 0UL;
@@ -26,11 +26,11 @@ PubSubClient mqttClient(mqttServerAddr, MQTT_PORT, callback, ethernetClient);
 
 // MQTT payloads
 const char MQTT_PAYLOAD_CONNECTED[] PROGMEM = "CONNECTED";
-const char MQTT_PAYLOAD_OK[] PROGMEM = "OK";
-const char MQTT_PAYLOAD_ERROR[] PROGMEM = "ERROR";
-const char MQTT_PAYLOAD_START[] PROGMEM = "START";
-const char MQTT_PAYLOAD_END[] PROGMEM = "END";
-const char MQTT_PAYLOAD_SLEEP[] PROGMEM = "SLEEP";
+const char MQTT_PAYLOAD_OK[] PROGMEM        = "OK";
+const char MQTT_PAYLOAD_ERROR[] PROGMEM     = "ERROR";
+const char MQTT_PAYLOAD_START[] PROGMEM     = "START";
+const char MQTT_PAYLOAD_END[] PROGMEM       = "END";
+const char MQTT_PAYLOAD_SLEEP[] PROGMEM     = "SLEEP";
 
 PGM_P const MQTT_PAYLOADS[] PROGMEM = {
     MQTT_PAYLOAD_CONNECTED, // idx = 0
@@ -44,47 +44,44 @@ PGM_P const MQTT_PAYLOADS[] PROGMEM = {
 /* MQTT_PAYLOADS indices, must match table above */
 typedef enum {
   MQTT_PAYLOAD_CONNECTED_IDX = 0,
-  MQTT_PAYLOAD_OK_IDX = 1,
-  MQTT_PAYLOAD_ERROR_IDX = 2,
-  MQTT_PAYLOAD_START_IDX = 3,
-  MQTT_PAYLOAD_END_IDX = 4,
-  MQTT_PAYLOAD_SLEEP_IDX = 5,
+  MQTT_PAYLOAD_OK_IDX        = 1,
+  MQTT_PAYLOAD_ERROR_IDX     = 2,
+  MQTT_PAYLOAD_START_IDX     = 3,
+  MQTT_PAYLOAD_END_IDX       = 4,
+  MQTT_PAYLOAD_SLEEP_IDX     = 5,
 } mqtt_payloads;
 
 // Status topics
-const char MQTT_STATUS[] PROGMEM = "relayshield/status/mqtt";
-const char VERSION_STATUS[] PROGMEM = "relayshield/status/version";
+const char MQTT_STATUS[] PROGMEM     = "relayshield/status/mqtt";
 const char INTERVAL_STATUS[] PROGMEM = "relayshield/status/interval";
-const char IP_ADDR_STATUS[] PROGMEM = "relayshield/status/ip_addr";
-const char UPTIME_STATUS[] PROGMEM = "relayshield/status/uptime";
-const char MEMORY_STATUS[] PROGMEM = "relayshield/status/memory";
-const char TIME_STATUS[] PROGMEM = "relayshield/status/time";
-const char ALARM_STATUS[] PROGMEM = "relayshield/status/alarm";
-const char RELAY_STATUS[] PROGMEM = "relayshield/status/relay";
+const char IP_ADDR_STATUS[] PROGMEM  = "relayshield/status/ip_addr";
+const char UPTIME_STATUS[] PROGMEM   = "relayshield/status/uptime";
+const char MEMORY_STATUS[] PROGMEM   = "relayshield/status/memory";
+const char TIME_STATUS[] PROGMEM     = "relayshield/status/time";
+const char ALARM_STATUS[] PROGMEM    = "relayshield/status/alarm";
+const char RELAY_STATUS[] PROGMEM    = "relayshield/status/relay";
 
 PGM_P const STATUS_TOPICS[] PROGMEM = {
     MQTT_STATUS,     // idx = 0
-    VERSION_STATUS,  // idx = 1
-    INTERVAL_STATUS, // idx = 2
-    IP_ADDR_STATUS,  // idx = 3
-    UPTIME_STATUS,   // idx = 4
-    MEMORY_STATUS,   // idx = 5
-    TIME_STATUS,     // idx = 6
-    ALARM_STATUS,    // idx = 7
-    RELAY_STATUS,    // idx = 8
+    INTERVAL_STATUS, // idx = 1
+    IP_ADDR_STATUS,  // idx = 2
+    UPTIME_STATUS,   // idx = 3
+    MEMORY_STATUS,   // idx = 4
+    TIME_STATUS,     // idx = 5
+    ALARM_STATUS,    // idx = 6
+    RELAY_STATUS,    // idx = 7
 };
 
 /* STATUS_TOPICS indices, must match table above */
 typedef enum {
-  MQTT_STATUS_IDX = 0,
-  VERSION_STATUS_IDX = 1,
-  INTERVAL_STATUS_IDX = 2,
-  IP_ADDR_STATUS_IDX = 3,
-  UPTIME_STATUS_IDX = 4,
-  MEMORY_STATUS_IDX = 5,
-  TIME_STATUS_IDX = 6,
-  ALARM_STATUS_IDX = 7,
-  RELAY_STATUS_IDX = 8,
+  MQTT_STATUS_IDX     = 0,
+  INTERVAL_STATUS_IDX = 1,
+  IP_ADDR_STATUS_IDX  = 2,
+  UPTIME_STATUS_IDX   = 3,
+  MEMORY_STATUS_IDX   = 4,
+  TIME_STATUS_IDX     = 5,
+  ALARM_STATUS_IDX    = 6,
+  RELAY_STATUS_IDX    = 7,
 } status_topics;
 
 // Control topics
@@ -106,15 +103,6 @@ void publish_connected() {
   payloadBuffer[0] = '\0';
   strcpy_P(payloadBuffer,
            (char *)pgm_read_word(&(MQTT_PAYLOADS[MQTT_PAYLOAD_CONNECTED_IDX])));
-  mqttClient.publish(topicBuffer, payloadBuffer);
-}
-
-void publish_version() {
-  topicBuffer[0] = '\0';
-  strcpy_P(topicBuffer,
-           (char *)pgm_read_word(&(STATUS_TOPICS[VERSION_STATUS_IDX])));
-  payloadBuffer[0] = '\0';
-  sprintf(payloadBuffer, "%s", VERSION);
   mqttClient.publish(topicBuffer, payloadBuffer);
 }
 
@@ -155,7 +143,6 @@ void publish_memory() {
 }
 
 void publish_configuration() {
-  publish_version();
   publish_status_interval();
   publish_ip_address();
 }

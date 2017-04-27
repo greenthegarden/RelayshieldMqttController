@@ -101,10 +101,13 @@ void callback(char *topic, uint8_t *payload, unsigned int payloadLength) {
   setup()
   Called by the Arduino framework once, before the main loop begins
   --------------------------------------------------------------------------------------*/
-void setup() {
+void setup()
+{
 #if DEBUG_LEVEL > 0
   Serial.begin(BAUD_RATE);
 #endif
+
+  status_led_init();
 
   if (ethernet_init()) {
     DEBUG_LOG(1, "Ethernet configured");
@@ -127,13 +130,17 @@ void setup() {
   // configure relay pins as outputs and set to off (where off depends on
   // connection type)
   relays_init();
+
+  // configure voltage reading
+  voltage_sensor_init();
 }
 
 /*--------------------------------------------------------------------------------------
   loop()
   Arduino main loop
   --------------------------------------------------------------------------------------*/
-void loop() {
+void loop()
+{
   unsigned long now = millis();
 
   if (!mqttClient.connected()) {
@@ -155,6 +162,20 @@ void loop() {
     if (mqttClientConnected) {
       statusPreviousMillis = now;
       publish_status();
+    }
+  }
+
+  if (now - voltagePreviousMillis >= VOLTAGE_UPDATE_INTERVAL) {
+    if (mqttClientConnected) {
+      voltagePreviousMillis = now;
+      publish_voltage();
+    }
+  }
+
+  if (now - currentPreviousMillis >= CURRENT_UPDATE_INTERVAL) {
+    if (mqttClientConnected) {
+      currentPreviousMillis = now;
+      publish_current();
     }
   }
 
