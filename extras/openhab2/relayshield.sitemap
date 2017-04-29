@@ -1,0 +1,29 @@
+sitemap relayshield label="Relayshield Controller"
+{
+	Frame label="Configuration" {
+		Text item=RelayshieldConnected
+		Text item=RelayshieldCodeVersion
+		Text item=RelayshieldStatusInterval
+		Text item=RelayshieldIpAddress
+	}
+	Frame label="State" {
+		Text item=RelayshieldUptime
+		Text item=RelayshieldMemory
+		Text item=RelayshieldLastStatusUpdate
+		Switch item=RelayshieldState
+	}
+	Frame label="Relays" visibility=[RelayshieldState==ON] {
+		Switch item=RelayshieldRelay1State
+		Text item=RelayshieldRelay1LastOn
+		Text item=RelayshieldRelay1LastOff
+      	Switch item=RelayshieldRelay2State
+		Text item=RelayshieldRelay2LastOn
+		Text item=RelayshieldRelay2LastOff
+		Switch item=RelayshieldRelay3State
+		Text item=RelayshieldRelay3LastOn
+		Text item=RelayshieldRelay3LastOff
+      	Switch item=RelayshieldRelay4State
+		Text item=RelayshieldRelay4LastOn
+		Text item=RelayshieldRelay4LastOff
+    }
+}

@@ -18,6 +18,8 @@ const byte BUFFER_SIZE = 32;
 char topicBuffer[BUFFER_SIZE];
 char payloadBuffer[BUFFER_SIZE];
 
+const byte FLOAT_DECIMAL_PLACES = 1;
+
 const unsigned long STATUS_UPDATE_INTERVAL = 5UL * 60UL * 1000UL; // 5 minutes
 unsigned long statusPreviousMillis = 0UL;
 
@@ -26,6 +28,7 @@ unsigned long statusPreviousMillis = 0UL;
 #include "mqttConfig.h"
 #include "relayConfig.h"
 #include "voltageSensorConfig.h"
+#include "currentSensorConfig.h"
 
 void no_network_behaviour() { relays_switch_off(); }
 

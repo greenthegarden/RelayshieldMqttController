@@ -15,8 +15,7 @@ byte mac[] = {0xCA, 0xFE, 0xBA, 0xBE, 0x01, 0x35};
 
 EthernetClient ethernetClient;
 
-byte ethernet_init()
-{
+byte ethernet_init() {
   // Configure Ethernet
   delay(NETWORK_STARTUP_DELAY); // allow some time for Ethernet processor to come out of reset on Arduino power up:
 

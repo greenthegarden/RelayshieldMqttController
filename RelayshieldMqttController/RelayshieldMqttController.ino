@@ -101,7 +101,8 @@ void callback(char *topic, uint8_t *payload, unsigned int payloadLength) {
   setup()
   Called by the Arduino framework once, before the main loop begins
   --------------------------------------------------------------------------------------*/
-void setup() {
+void setup()
+{
 #if DEBUG_LEVEL > 0
   Serial.begin(BAUD_RATE);
 #endif
@@ -138,7 +139,8 @@ void setup() {
   loop()
   Arduino main loop
   --------------------------------------------------------------------------------------*/
-void loop() {
+void loop()
+{
   unsigned long now = millis();
 
   if (!mqttClient.connected()) {
@@ -167,6 +169,13 @@ void loop() {
     if (mqttClientConnected) {
       voltagePreviousMillis = now;
       publish_voltage();
+    }
+  }
+
+  if (now - currentPreviousMillis >= CURRENT_UPDATE_INTERVAL) {
+    if (mqttClientConnected) {
+      currentPreviousMillis = now;
+      publish_current();
     }
   }
 
