@@ -30,8 +30,8 @@ float mapfloat(float x, float in_min, float in_max, float out_min, float out_max
 
 // 4.8v = 11.5v
 float voltage() {
-  float voltage_divide = analogRead(VOLTAGE_PIN) * (5.0 / 1023.0);
-  return mapfloat(voltage_divide, 0.0, 5.0, 0.0, 14.0);
+  float reading = analogRead(VOLTAGE_SENSOR_PIN) * (5.0 / 1023.0);
+  return mapfloat(reading, 0.0, 5.0, 0.0, 14.0);
 }
 
 void publish_voltage() {
@@ -39,7 +39,7 @@ void publish_voltage() {
   strcpy_P(topicBuffer, (char*)pgm_read_word(&(VOLTAGE_MEASUREMENT_TOPICS[VOLTAGE_MEASUREMENT_TOPIC_IDX])));
   payloadBuffer[0] = '\0';
   dtostrf(voltage(),1,FLOAT_DECIMAL_PLACES, payloadBuffer);
-  DEBUG_LOG(1, "payloadBuffer: ");
+  DEBUG_LOG(1, topicBuffer);
   DEBUG_LOG(1, payloadBuffer);
   mqttClient.publish(topicBuffer, payloadBuffer);
 }
