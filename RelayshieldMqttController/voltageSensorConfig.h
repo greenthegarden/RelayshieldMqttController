@@ -30,8 +30,8 @@ float mapfloat(float x, float in_min, float in_max, float out_min, float out_max
 
 // 4.8v = 11.5v
 float voltage() {
-  float reading = analogRead(VOLTAGE_SENSOR_PIN) * (5.0 / 1023.0);
-  return mapfloat(reading, 0.0, 5.0, 0.0, 14.0);
+  float reading = analogRead(VOLTAGE_SENSOR_PIN) * (VOLTAGE_REF / 1023.0);
+  return mapfloat(reading, 0.0, VOLTAGE_REF, 0.0, 14.0);
 }
 
 void publish_voltage() {

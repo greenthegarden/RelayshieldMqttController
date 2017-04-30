@@ -14,6 +14,8 @@
 const int BAUD_RATE = 9600;
 #endif
 
+const float VOLTAGE_REF = 5.0;
+
 const byte BUFFER_SIZE = 32;
 char topicBuffer[BUFFER_SIZE];
 char payloadBuffer[BUFFER_SIZE];

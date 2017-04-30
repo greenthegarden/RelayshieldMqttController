@@ -7,8 +7,8 @@ const unsigned long CURRENT_UPDATE_INTERVAL = 10UL * 1000UL;
 unsigned long currentPreviousMillis = 0UL;
 
 // sensor specific variables
-const int MV_PER_AMP = 66; // sensor scale factor
-const float SENSOR_OFFSET = 5.0 / 2.0;  // offset since measuring both +/- currents
+const float MV_PER_AMP = 66.0; // sensor scale factor
+const float SENSOR_OFFSET = VOLTAGE_REF / 2.0;  // offset since measuring both +/- currents
 
 // Measurement topics
 const char CURRENT_MEASUREMENT_TOPIC[] PROGMEM = "relayshield/measurement/current";
@@ -29,7 +29,7 @@ void current_sensor_init() {
 }
 
 float current() {
-  float reading = analogRead(CURRENT_SENSOR_PIN) * (5.0 / 1023.0); // pin voltage reading
+  float reading = analogRead(CURRENT_SENSOR_PIN) * (VOLTAGE_REF / 1023.0);
   DEBUG_LOG(2, F("Current sensor:"));
   DEBUG_LOG(2, reading);
   DEBUG_LOG(2, F("V"));
