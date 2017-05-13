@@ -182,4 +182,8 @@ void loop()
   if (!mqttClientConnected) {
     no_network_behaviour();
   }
+
+  if (!loopRun) {
+    loopRun = True;
+  }
 }

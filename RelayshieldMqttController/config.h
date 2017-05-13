@@ -20,6 +20,8 @@ char payloadBuffer[BUFFER_SIZE];
 
 const byte FLOAT_DECIMAL_PLACES = 1;
 
+boolean loopRun = False;
+
 const unsigned long STATUS_UPDATE_INTERVAL = 5UL * 60UL * 1000UL; // 5 minutes
 unsigned long statusPreviousMillis = 0UL;
 
