@@ -18,19 +18,14 @@ The MQTT broker address is required to be defined within the source code. Set th
 
 ## Compiling code
 
-The project is structured for use with [PlatformIO](http://platformio.org). If using PlatformIO, the external libraries used in the project will be automatically added, apart from [MemoryFree](https://github.com/sudar/MemoryFree), which needs to be added to the project lib directory, using
-
-```
-cd lib
-rm -rf MemoryFree/
-git clone https://github.com/sudar/MemoryFree.git
-```
+The project is structured for use with [PlatformIO](http://platformio.org). If using PlatformIO, the external libraries used in the project will be automatically added.
 
 To compile the code using the Arduino IDE the following additional libraries are required
-- [NetEEPROM](https://github.com/gregington/NetEEPROM)
-- [PubSubClient](https://github.com/knolleary/pubsubclient)
+-   [NetEEPROM](https://github.com/gregington/NetEEPROM)
+-   [PubSubClient](https://github.com/knolleary/pubsubclient)
+-   [MemoryFree](https://github.com/sudar/MemoryFree.git)
 
-# Using program
+# Using the program
 
 In order to make use of the program, MQTT structured messages must be generated.
 
@@ -42,8 +37,8 @@ relayshield/control/relay
 
 and payload `x,y`, where
 
-- `x` is the relay number (1 to 4)
-- `y` is either `0` or `1` to switch the relay off or on, respectively.
+-   `x` is the relay number (1 to 4)
+-   `y` is either `0` or `1` to switch the relay off or on, respectively.
 
 For example to swich relay 2 on, a message in the following form is used
 
@@ -59,8 +54,8 @@ relayshield/status/relay
 
 and payload, in the format `x,y`, where
 
-- `x` is the relay number (1 to 4)
-- `y` is either `0` or `1` to signifity whether the relay is off or on, respectively.
+-   `x` is the relay number (1 to 4)
+-   `y` is either `0` or `1` to signifity whether the relay is off or on, respectively.
 
 Other status messages are generated for reliability. See the file [mqttConfig.h](RelayshieldMqttController/mqttConfig.h) for details.
 
