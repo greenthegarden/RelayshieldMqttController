@@ -34,9 +34,6 @@ rule "Status update timestamp"
 when
 	Item RelayshieldUptimeRaw received update
 then
-	logInfo(relayshieldloggingname, "Uptime: " + RelayshieldUptimeRaw.state)
-//	var Number uptimeRaw = RelayshieldUptimeRaw.state as DecimalType
-//	postUpdate(RelayshieldUptime, (uptimeRaw / 1000).intValue)	// convert from milliseconds to seconds
 	postUpdate(RelayshieldLastStatusUpdate, new DateTimeType())
 end
 
@@ -117,7 +114,7 @@ then
 			var String message = relayshieldsystemname + ": " + "relay " + relay + " on"
 			logInfo(relayshieldloggingname, message)
 			sendNotification(notificationto, message)
-			
+
 		}
 //	} finally {
 //	   	lock.unlock()
@@ -205,4 +202,3 @@ end
 //	RelayshieldRelay1State.sendCommand(OFF)
 //	RelayshieldRelay4State.sendCommand(OFF)
 //end
-
