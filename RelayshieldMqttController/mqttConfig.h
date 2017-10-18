@@ -24,7 +24,7 @@ PubSubClient mqttClient(mqttServerAddr, MQTT_PORT, callback, ethernetClient);
 
 // MQTT topic definitions
 
-// MQTT payloads
+// MQTT strings
 const char MQTT_PAYLOAD_CONNECTED[] PROGMEM = "CONNECTED";
 const char MQTT_PAYLOAD_OK[] PROGMEM        = "OK";
 const char MQTT_PAYLOAD_ERROR[] PROGMEM     = "ERROR";
@@ -50,6 +50,7 @@ typedef enum {
   MQTT_PAYLOAD_END_IDX       = 4,
   MQTT_PAYLOAD_SLEEP_IDX     = 5,
 } mqtt_payloads;
+
 
 // Status topics
 const char MQTT_STATUS[] PROGMEM     = "relayshield/status/mqtt";

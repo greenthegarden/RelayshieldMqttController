@@ -11,12 +11,13 @@
 
 // global variable definitions
 #if DEBUG_LEVEL > 0
-const int BAUD_RATE = 9600;
+const unsigned long BAUD_RATE = 9600;
 #endif
 
 const float VOLTAGE_REF = 5.0;
 
 const byte BUFFER_SIZE = 32;
+char buffer[BUFFER_SIZE];
 char topicBuffer[BUFFER_SIZE];
 char payloadBuffer[BUFFER_SIZE];
 
