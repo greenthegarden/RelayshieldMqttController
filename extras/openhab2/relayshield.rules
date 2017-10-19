@@ -43,7 +43,7 @@ then
 			relayshieldUpdateTimer = null
 			])
 	} else {
-		relayshieldUpdateTimer.reschedule(now.plusMinutes(2*relayshieldUpdateAge)
+		relayshieldUpdateTimer.reschedule(now.plusMinutes(2*relayshieldUpdateAge))
 	}
 end
 
@@ -62,7 +62,8 @@ when
 then
 //	lock.lock()
 //    try {
-	val String message = "RelayshieldRelayState " + RelayshieldRelayState.state.toString + " at " + new DateTime().toString
+	var String message = ""
+	message = "RelayshieldRelayState " + RelayshieldRelayState.state.toString + " at " + new DateTime().toString
 	logInfo(relayshieldloggingname, message)
 
 	val String[] messageParts = RelayshieldRelayState.state.toString.split(",");
@@ -82,7 +83,7 @@ then
 		if (relay == "4") {
 			RelayshieldRelay4State.sendCommand(OFF)
 		}
-		var String message = relayshieldsystemname + ": " + "relay " + relay + " off" + " at " + new DateTime().toString
+		message = relayshieldsystemname + ": " + "relay " + relay + " off" + " at " + new DateTime().toString
 		logInfo(relayshieldloggingname, message)
 		sendNotification(notificationto, message)
 	} else {		// relay was turned on
@@ -98,7 +99,7 @@ then
 		if (relay == "4") {
 			RelayshieldRelay4State.sendCommand(ON)
 		}
-		var String message = relayshieldsystemname + ": " + "relay " + relay + " on" + " at " + new DateTime().toString
+		message = relayshieldsystemname + ": " + "relay " + relay + " on" + " at " + new DateTime().toString
 		logInfo(relayshieldloggingname, message)
 		sendNotification(notificationto, message)
 	}
