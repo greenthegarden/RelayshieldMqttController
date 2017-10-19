@@ -11,27 +11,6 @@ import org.joda.time.*
 
 //var java.util.concurrent.locks.ReentrantLock lock = new java.util.concurrent.locks.ReentrantLock()
 
-// This rule sends a telegram notification if garagedoor has been open for 30 min.
-rule "Send telegram Notification | Garagedoor 2 open for 30 min."
-when
-    Item Garage_Port_2_State_Closed changed to OEPN
-then
-    if(garagedoor2Timer == null || garagedoor2Timer.hasTerminated) {
-        garagedoor2Timer = createTimer(now.plusMinutes(30), [|
-            garagedoor2Timer = null
-            sendTelegram((TelegramBots), (Message6))
-        ])
-    }
-end
-
-rule "Cancel telegram Notification | Garagedoor 2 open for 30 min."
-when
-    Item Garage_Port_2_State_Closed changed to OPEN
-then
-    garagedoor2Timer.cancel() //Terminate timer if door is closed before the timer ends
-end
-
-
 var int relayshieldUpdateAge = 5	// minutes
 
 rule "Last connected timestamp"
