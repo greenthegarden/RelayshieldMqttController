@@ -7,8 +7,8 @@ const unsigned long CURRENT_UPDATE_INTERVAL = 10UL * 1000UL;
 unsigned long currentPreviousMillis = 0UL;
 
 // sensor specific variables
-const int MV_PER_AMP = 66; // sensor scale factor
-const float SENSOR_OFFSET = 5.0 / 2.0;  // offset since measuring both +/- currents
+const float MV_PER_AMP = 66.0; // sensor scale factor
+const float SENSOR_OFFSET = VOLTAGE_REF / 2.0;  // offset since measuring both +/- currents
 
 // Measurement topics
 const char CURRENT_MEASUREMENT_TOPIC[] PROGMEM = "relayshield/measurement/current";
@@ -28,16 +28,24 @@ void current_sensor_init() {
   pinMode(CURRENT_SENSOR_PIN, INPUT);
 }
 
-float read_current() {
-  float voltage = analogRead(CURRENT_SENSOR_PIN) * (5.0 / 1023.0) * 1000; // Gets you mV reading
-  return (voltage - ACSoffset) / mVperAmp;
+float current() {
+  float reading = analogRead(CURRENT_SENSOR_PIN) * (VOLTAGE_REF / 1023.0);
+  DEBUG_LOG(2, F("Current sensor:"));
+  DEBUG_LOG(2, reading);
+  DEBUG_LOG(2, F("V"));
+  float current = (reading - SENSOR_OFFSET) * 1000.0 / MV_PER_AMP;
+  DEBUG_LOG(2, current)
+  DEBUG_LOG(2, F("A"));
+  return abs(current);
 }
 
 void publish_current() {
   topicBuffer[0] = '\0';
   strcpy_P(topicBuffer, (char*)pgm_read_word(&(CURRENT_MEASUREMENT_TOPICS[CURRENT_MEASUREMENT_TOPIC_IDX])));
   payloadBuffer[0] = '\0';
-  dtostrf(read_voltage(),1,FLOAT_DECIMAL_PLACES, payloadBuffer);
+  dtostrf(current(),1,FLOAT_DECIMAL_PLACES, payloadBuffer);
+  DEBUG_LOG(1, topicBuffer);
+  DEBUG_LOG(1, payloadBuffer);
   mqttClient.publish(topicBuffer, payloadBuffer);
 }
 

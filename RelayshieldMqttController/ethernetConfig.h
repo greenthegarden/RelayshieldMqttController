@@ -10,7 +10,8 @@ const unsigned long NETWORK_STARTUP_DELAY = 1000UL;
 
 //const byte          ETHERNET_CS_PIN       = 10;
 
-byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
+//ca:fe:ba:be:01:35
+byte mac[] = {0xCA, 0xFE, 0xBA, 0xBE, 0x01, 0x35};
 
 EthernetClient ethernetClient;
 
