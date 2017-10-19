@@ -41,7 +41,8 @@ relay_t relays[] = {
   {RELAY_4_CONTROL_PIN},
 };
 
-void relays_init() {
+void relays_init()
+{
   for (byte idx = 0; idx < ARRAY_SIZE(relays); idx++) {
     pinMode(relays[idx].controlPin, OUTPUT);
     digitalWrite(relays[idx].controlPin, LOW);
@@ -49,11 +50,13 @@ void relays_init() {
 }
 
 // returns 1 if relay connected to given pin is on, else returns 0
-byte relay_state(byte idx) {
+byte relay_state(byte idx)
+{
   return(digitalRead(relays[idx].controlPin));
 }
 
-void publish_relay_state(byte relayIdx, boolean relayState) {
+void publish_relay_state(byte relayIdx, boolean relayState)
+{
   payloadBuffer[0] = '\0';
   if (relayState == ON) { // relay ON
     DEBUG_LOG(1, "relay on");
@@ -72,7 +75,8 @@ void publish_relay_state(byte relayIdx, boolean relayState) {
 }
 
 // returns 1 if relay is currently on and switched off, else returns 0
-byte relay_switch_off(byte idx, boolean report) {
+byte relay_switch_off(byte idx, boolean report)
+{
   // only switch relay off if it is currently on
   if (relay_state(idx) == ON) {
     digitalWrite(relays[idx].controlPin, LOW);
@@ -88,7 +92,8 @@ byte relay_switch_off(byte idx, boolean report) {
 }
 
 // returns 1 if relay is currently off and switched on, else returns 0
-byte relay_switch_on(byte idx, boolean report) {
+byte relay_switch_on(byte idx, boolean report)
+{
   if (relay_state(idx) == OFF) {
     digitalWrite(relays[idx].controlPin, HIGH);
     DEBUG_LOG(1, "relay on");
@@ -102,14 +107,16 @@ byte relay_switch_on(byte idx, boolean report) {
   return 0;
 }
 
-void relays_switch_off() {
+void relays_switch_off()
+{
   for (byte idx = 0; idx < ARRAY_SIZE(relays); idx++) {
     if (relay_state(idx) == ON)
       relay_switch_off(idx);
   }
 }
 
-void relays_switch_on() {
+void relays_switch_on()
+{
   for (byte idx = 0; idx < ARRAY_SIZE(relays); idx++) {
     if (relay_state(idx) == OFF)
       relay_switch_on(idx);

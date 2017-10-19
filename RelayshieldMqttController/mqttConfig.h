@@ -1,6 +1,7 @@
 #ifndef RELAYSHIELDMQTTCONTROLLER_MQTT_CONFIG_H_
 #define RELAYSHIELDMQTTCONTROLLER_MQTT_CONFIG_H_
 
+
 #include <PubSubClient.h>
 
 // MQTT parameters
@@ -97,7 +98,8 @@ typedef enum {
   RELAY_CONTROL_IDX = 0,
 } control_topics;
 
-void publish_connected() {
+void publish_connected()
+{
   topicBuffer[0] = '\0';
   strcpy_P(topicBuffer,
            (char *)pgm_read_word(&(STATUS_TOPICS[MQTT_STATUS_IDX])));
@@ -107,7 +109,8 @@ void publish_connected() {
   mqttClient.publish(topicBuffer, payloadBuffer);
 }
 
-void publish_status_interval() {
+void publish_status_interval()
+{
   topicBuffer[0] = '\0';
   strcpy_P(topicBuffer,
            (char *)pgm_read_word(&(STATUS_TOPICS[INTERVAL_STATUS_IDX])));
@@ -116,7 +119,8 @@ void publish_status_interval() {
                      ltoa(STATUS_UPDATE_INTERVAL, payloadBuffer, 10));
 }
 
-void publish_ip_address() {
+void publish_ip_address()
+{
   topicBuffer[0] = '\0';
   strcpy_P(topicBuffer,
            (char *)pgm_read_word(&(STATUS_TOPICS[IP_ADDR_STATUS_IDX])));
@@ -127,7 +131,8 @@ void publish_ip_address() {
   mqttClient.publish(topicBuffer, payloadBuffer);
 }
 
-void publish_uptime() {
+void publish_uptime()
+{
   topicBuffer[0] = '\0';
   strcpy_P(topicBuffer,
            (char *)pgm_read_word(&(STATUS_TOPICS[UPTIME_STATUS_IDX])));
@@ -135,7 +140,8 @@ void publish_uptime() {
   mqttClient.publish(topicBuffer, ltoa(millis(), payloadBuffer, 10));
 }
 
-void publish_memory() {
+void publish_memory()
+{
   topicBuffer[0] = '\0';
   strcpy_P(topicBuffer,
            (char *)pgm_read_word(&(STATUS_TOPICS[MEMORY_STATUS_IDX])));
@@ -143,14 +149,17 @@ void publish_memory() {
   mqttClient.publish(topicBuffer, itoa(getFreeMemory(), payloadBuffer, 10));
 }
 
-void publish_configuration() {
+void publish_configuration()
+{
   publish_status_interval();
   publish_ip_address();
 }
 
-void publish_status() {
+void publish_status()
+{
   publish_uptime();
   publish_memory();
 }
+
 
 #endif /* RELAYSHIELDMQTTCONTROLLER_MQTT_CONFIG_H_ */

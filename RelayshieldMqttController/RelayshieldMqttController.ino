@@ -1,8 +1,7 @@
-#include <Arduino.h>
-
 #include "config.h"
 
-boolean mqtt_connect() {
+boolean mqtt_connect()
+{
   DEBUG_LOG(1, "Attempting MQTT connection ...");
   if (mqttClient.connect(MQTT_CLIENT_ID, MQTT_USERNAME, MQTT_PASSWORD)) {
     DEBUG_LOG(1, "  connected");
@@ -19,7 +18,8 @@ boolean mqtt_connect() {
   return mqttClient.connected();
 }
 
-void callback(char *topic, uint8_t *payload, unsigned int payloadLength) {
+void callback(char *topic, uint8_t *payload, unsigned int payloadLength)
+{
   // handle message arrived
   /* topic = part of the variable header:has topic name of the topic where the
      publish received

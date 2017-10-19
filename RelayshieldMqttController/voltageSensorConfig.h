@@ -8,16 +8,19 @@ unsigned long voltagePreviousMillis = 0UL;
 
 const byte VOLTAGE_SENSOR_PIN = A2;
 
-void voltage_sensor_init() {
+void voltage_sensor_init()
+{
   pinMode(VOLTAGE_SENSOR_PIN, INPUT);
 }
 
-float mapfloat(float x, float in_min, float in_max, float out_min, float out_max) {
+float mapfloat(float x, float in_min, float in_max, float out_min, float out_max)
+{
  return ((x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min);
 }
 
 // 4.8v = 11.5v
-float voltage() {
+float voltage()
+{
   float reading = analogRead(VOLTAGE_SENSOR_PIN) * (VOLTAGE_REF / 1023.0);
   return mapfloat(reading, 0.0, VOLTAGE_REF, 0.0, 14.0);
 }
@@ -35,7 +38,8 @@ typedef enum {
 } voltage_measurement_topics;
 
 
-void publish_voltage() {
+void publish_voltage()
+{
   topicBuffer[0] = '\0';
   strcpy_P(topicBuffer, (char*)pgm_read_word(&(VOLTAGE_MEASUREMENT_TOPICS[VOLTAGE_MEASUREMENT_TOPIC_IDX])));
   payloadBuffer[0] = '\0';

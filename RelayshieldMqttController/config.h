@@ -1,6 +1,7 @@
 #ifndef RELAYSHIELDMQTTCONTROLLER_CONFIG_H_
 #define RELAYSHIELDMQTTCONTROLLER_CONFIG_H_
 
+
 #include "debug.h"
 
 // external libraries
@@ -39,7 +40,8 @@ void no_network_behaviour() { relays_switch_off(); }
 
 const byte STATUS_LED_CONTROL_PIN = 13;
 
-void status_led_init() {
+void status_led_init()
+{
   pinMode(STATUS_LED_CONTROL_PIN, OUTPUT);
   digitalWrite(STATUS_LED_CONTROL_PIN, LOW);
 }
@@ -47,7 +49,8 @@ void status_led_init() {
 const unsigned long LED_ON_DELAY = 1000UL;
 const unsigned long LED_OFF_DELAY = 500UL;
 
-void status_led_blink(byte blinks) {
+void status_led_blink(byte blinks)
+{
   for (byte cnt = 0; cnt < blinks; cnt++) {
     digitalWrite(STATUS_LED_CONTROL_PIN, HIGH);
     delay(LED_ON_DELAY);
@@ -55,5 +58,6 @@ void status_led_blink(byte blinks) {
     delay(LED_OFF_DELAY);
   }
 }
+
 
 #endif /* RELAYSHIELDMQTTCONTROLLER_CONFIG_H_ */
