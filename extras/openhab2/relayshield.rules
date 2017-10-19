@@ -13,9 +13,9 @@ val String mailto = "cutlervufamily@gmail.com"
 
 var int relayshieldUpdateAge = 5	// minutes
 
-var Timer RelayshieldUpdateTimer = null
+var Timer relayshieldUpdateTimer = null
 
-rule "Last connected timestamp"
+rule "Relayshield last connected timestamp"
 when
 	Item RelayshieldConnectedMessage received update
 then
@@ -24,7 +24,7 @@ then
 	RelayshieldState.sendCommand(ON)
 end
 
-rule "Update status interval"
+rule "Relayshield update status interval"
 when
 	Item RelayshieldStatusInterval changed
 then
@@ -32,22 +32,22 @@ then
 	relayshieldUpdateAge = (newUpdateAge / 60000).intValue	// convert to minutes and update
 end
 
-rule "Status update timestamp | Begin timer"
+rule "Relayshield status update timestamp | timer"
 when
 	Item RelayshieldUptimeRaw received update
 then
 	postUpdate(RelayshieldLastStatusUpdate, new DateTimeType())
-  if (RelayshieldUpdateTimer == null || RelayshieldUpdateTimer.hasTerminated) {
-		RelayshieldUpdateTimer = createTimer(now.plusMinutes(2*relayshieldUpdateAge), [|
-    	RelayshieldState.sendCommand(OFF)
-			RelayshieldUpdateTimer = null
-      ])
+	if (relayshieldUpdateTimer == null || relayshieldUpdateTimer.hasTerminated) {
+		relayshieldUpdateTimer = createTimer(now.plusMinutes(2*relayshieldUpdateAge), [|
+			RelayshieldState.sendCommand(OFF)
+			relayshieldUpdateTimer = null
+			])
 	} else {
-		RelayshieldUpdateTimer.reschedule(now.plusMinutes(2*relayshieldUpdateAge)
+		relayshieldUpdateTimer.reschedule(now.plusMinutes(2*relayshieldUpdateAge)
 	}
 end
 
-rule "Relayshield State change"
+rule "Relayshield State change notification"
 when
 	Item RelayshieldState changed
 then
