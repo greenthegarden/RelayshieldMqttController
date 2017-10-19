@@ -1,29 +1,44 @@
-sitemap relayshield label="Relayshield Controller"
+sitemap relayshield label="Controller"
 {
-	Frame label="Configuration" {
-		Text item=RelayshieldConnected
-		Text item=RelayshieldCodeVersion
-		Text item=RelayshieldStatusInterval
-		Text item=RelayshieldIpAddress
-	}
-	Frame label="State" {
-		Text item=RelayshieldUptime
-		Text item=RelayshieldMemory
-		Text item=RelayshieldLastStatusUpdate
-		Switch item=RelayshieldState
-	}
 	Frame label="Relays" visibility=[RelayshieldState==ON] {
-		Switch item=RelayshieldRelay1State
-		Text item=RelayshieldRelay1LastOn
-		Text item=RelayshieldRelay1LastOff
-      	Switch item=RelayshieldRelay2State
-		Text item=RelayshieldRelay2LastOn
-		Text item=RelayshieldRelay2LastOff
-		Switch item=RelayshieldRelay3State
-		Text item=RelayshieldRelay3LastOn
-		Text item=RelayshieldRelay3LastOff
-      	Switch item=RelayshieldRelay4State
-		Text item=RelayshieldRelay4LastOn
-		Text item=RelayshieldRelay4LastOff
-    }
+		Group item=gRelayshieldRelay1 label="Relay 1" icon="switch" {
+			Switch item=RelayshieldRelay1State
+			Text item=RelayshieldRelay1LastOn icon="clock"
+			Text item=RelayshieldRelay1LastOff icon="clock"
+		}
+		Group item=gRelayshieldRelay2 label="Relay 2" icon="switch" {
+      		Switch item=RelayshieldRelay2State
+			Text item=RelayshieldRelay2LastOn icon="clock"
+			Text item=RelayshieldRelay2LastOff icon="clock"
+		}
+		Group item=gRelayshieldRelay3 label="Relay 3" icon="switch" {
+			Switch item=RelayshieldRelay3State
+			Text item=RelayshieldRelay3LastOn icon="clock"
+			Text item=RelayshieldRelay3LastOff icon="clock"
+		}
+		Group item=gRelayshieldRelay4 label="Relay 4" icon="switch" {
+      		Switch item=RelayshieldRelay4State
+			Text item=RelayshieldRelay4LastOn icon="clock"
+			Text item=RelayshieldRelay4LastOff icon="clock"
+    	}
+    }	// end Frame label="Relays"
+	Frame label="Status and Configuration" {
+		Text label="Status and Configuration" icon="settings" {
+//		Group item=gRelayshieldStatus label="Status" icon="switch" {
+			Frame label="Status" {
+				Switch item=RelayshieldState
+				Text item=RelayshieldUptime label="Uptime [%s]" icon="clock"
+				Text item=RelayshieldMemory icon="settings"
+				Text item=RelayshieldLastStatusUpdate icon="calendar"
+			}
+//		}	// end Group item=gRelayshieldStatus
+//		Group item=gRelayshieldConfig label="Configuration" icon="settings" {
+			Frame label="Configuration" {
+				Text item=RelayshieldLastConnected icon="calendar"
+				Text item=RelayshieldStatusInterval icon="clock"
+				Text item=RelayshieldIpAddress icon="network"
+			}
+		}	// end Group item=gRelayshieldConfig
+		}	// end Text label="Status and Configuration"
+//	}	// end Frame label="Status and Configuration"
 }

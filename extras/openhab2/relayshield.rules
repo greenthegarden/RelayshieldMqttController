@@ -1,27 +1,30 @@
-import org.openhab.core.library.types.*
-//import org.openhab.core.library.items.*
-import org.openhab.core.persistence.*
-import org.openhab.model.script.actions.*
+import org.joda.time.DateTime
 
-import org.joda.time.*
+val String relayshieldsystemname = "Relayshield"
 
-/* TODO:
- * Fix that requests from Caldav do not get delayed if another task is running
- */
+// define name for logging
+val String relayshieldloggingname = "relayshield"
 
-//var java.util.concurrent.locks.ReentrantLock lock = new java.util.concurrent.locks.ReentrantLock()
+// define address for notifications
+val String notificationto = "greenthegarden@gmail.com"
 
+// define email address to send messages
+val String mailto = "cutlervufamily@gmail.com"
 
 var int relayshieldUpdateAge = 5	// minutes
 
-rule "Last connected timestamp"
+var Timer relayshieldUpdateTimer = null
+
+rule "Relayshield last connected timestamp"
 when
 	Item RelayshieldConnectedMessage received update
 then
-	RelayshieldConnected.postUpdate(new DateTimeType)
+	postUpdate(RelayshieldLastConnected, new DateTimeType())
+	postUpdate(RelayshieldLastStatusUpdate, new DateTimeType())
+	RelayshieldState.sendCommand(ON)
 end
 
-rule "Update status interval"
+rule "Relayshield update status interval"
 when
 	Item RelayshieldStatusInterval changed
 then
@@ -29,30 +32,28 @@ then
 	relayshieldUpdateAge = (newUpdateAge / 60000).intValue	// convert to minutes and update
 end
 
-rule "Status update timestamp"
+rule "Relayshield status update timestamp | timer"
 when
-	Item RelayshieldUptime received update
+	Item RelayshieldUptimeRaw received update
 then
-	RelayshieldLastStatusUpdate.postUpdate(new DateTimeType)
+	postUpdate(RelayshieldLastStatusUpdate, new DateTimeType())
+	if (relayshieldUpdateTimer == null || relayshieldUpdateTimer.hasTerminated) {
+		relayshieldUpdateTimer = createTimer(now.plusMinutes(2*relayshieldUpdateAge), [|
+			RelayshieldState.sendCommand(OFF)
+			relayshieldUpdateTimer = null
+			])
+	} else {
+		relayshieldUpdateTimer.reschedule(now.plusMinutes(2*relayshieldUpdateAge)
+	}
 end
 
-rule "Relayshield connected"
+rule "Relayshield State change notification"
 when
-	// update every minute
-	Time cron "0 0/1 * * * ?"
+	Item RelayshieldState changed
 then
-	if (RelayshieldLastStatusUpdate.state == Undefined || RelayshieldLastStatusUpdate.state == Uninitialized) {
-		logInfo("relayshield", "")
-	} else {
-		var DateTime dateTime = new DateTime((RelayshieldLastStatusUpdate.state as DateTimeType).calendar.timeInMillis)
-		if (dateTime.plusMinutes(relayshieldUpdateAge+1).isBefore(now)) {
-			// is more than <updateAge> minutes old
-  			RelayshieldState.sendCommand(OFF)
-		} else {
-			// is less than <updateAge> minutes old
-			RelayshieldState.sendCommand(ON)
-		}
-	}
+	val String message = relayshieldsystemname + ": " + RelayshieldState.state.toString + " at " + new DateTime().toString
+	logInfo(relayshieldloggingname, message)
+	sendNotification(notificationto, message)
 end
 
 rule "Relayshield Relay State"
@@ -61,49 +62,46 @@ when
 then
 //	lock.lock()
 //    try {
-    	logInfo("relayshield", "RelayshieldRelayState state changed. RelayshieldRelayState.state: [{}].", RelayshieldRelayState.state)
+	val String message = "RelayshieldRelayState " + RelayshieldRelayState.state.toString + " at " + new DateTime().toString
+	logInfo(relayshieldloggingname, message)
 
-		val String[] messageParts = RelayshieldRelayState.state.toString.split(",");
-		val String relay = messageParts.get(0);
-		val String state = messageParts.get(1);
+	val String[] messageParts = RelayshieldRelayState.state.toString.split(",");
+	val String relay = messageParts.get(0);
+	val String state = messageParts.get(1);
 
-		if (state == "0") {		// relay turned off
-			logInfo("relayshield", "relay turned off")
-			if (relay == "1") {
-				logInfo("relayshield", "relay 1 off")
-				RelayshieldRelay1State.sendCommand(OFF)
-			}
-			if (relay == "2") {
-				logInfo("relayshield", "relay 2 off")
-				RelayshieldRelay2State.sendCommand(OFF)
-			}
-			if (relay == "3") {
-				logInfo("relayshield", "relay 3 off")
-				RelayshieldRelay3State.sendCommand(OFF)
-			}
-			if (relay == "4") {
-				logInfo("relayshield", "relay 4 off")
-				RelayshieldRelay4State.sendCommand(OFF)
-			}
-		} else {		// relay was turned on
-			logInfo("relayshield", "relay turned on")
-			if (relay == "1") {
-				logInfo("relayshield", "relay 1 on")
-				RelayshieldRelay1State.sendCommand(ON)
-			}
-			if (relay == "2") {
-				logInfo("relayshield", "relay 2 on")
-				RelayshieldRelay2State.sendCommand(ON)
-			}
-			if (relay == "3") {
-				logInfo("relayshield", "relay 3 on")
-				RelayshieldRelay3State.sendCommand(ON)
-			}
-			if (relay == "4") {
-				logInfo("relayshield", "relay 4 on")
-				RelayshieldRelay4State.sendCommand(ON)
-			}
+	if (state == "0") {		// relay turned off
+		if (relay == "1") {
+			RelayshieldRelay1State.sendCommand(OFF)
 		}
+		if (relay == "2") {
+			RelayshieldRelay2State.sendCommand(OFF)
+		}
+		if (relay == "3") {
+			RelayshieldRelay3State.sendCommand(OFF)
+		}
+		if (relay == "4") {
+			RelayshieldRelay4State.sendCommand(OFF)
+		}
+		var String message = relayshieldsystemname + ": " + "relay " + relay + " off" + " at " + new DateTime().toString
+		logInfo(relayshieldloggingname, message)
+		sendNotification(notificationto, message)
+	} else {		// relay was turned on
+		if (relay == "1") {
+			RelayshieldRelay1State.sendCommand(ON)
+		}
+		if (relay == "2") {
+			RelayshieldRelay2State.sendCommand(ON)
+		}
+		if (relay == "3") {
+			RelayshieldRelay3State.sendCommand(ON)
+		}
+		if (relay == "4") {
+			RelayshieldRelay4State.sendCommand(ON)
+		}
+		var String message = relayshieldsystemname + ": " + "relay " + relay + " on" + " at " + new DateTime().toString
+		logInfo(relayshieldloggingname, message)
+		sendNotification(notificationto, message)
+	}
 //	} finally {
 //	   	lock.unlock()
 //	}
@@ -111,53 +109,81 @@ end
 
 rule "Records last relay 1 on and off times"
 when
-  Item RelayshieldRelay1State received command
+	Item RelayshieldRelay1State received command
 then
 	if (receivedCommand == ON) {
-  		postUpdate(RelayshieldRelay1LastOn, new DateTimeType())
-  		RelayshieldRelayControl.sendCommand("1,1")
-  	} else {
-  		postUpdate(RelayshieldRelay1LastOff, new DateTimeType())
-  		RelayshieldRelayControl.sendCommand("1,0")
-  	}
+		postUpdate(RelayshieldRelay1LastOn, new DateTimeType())
+		RelayshieldRelayControl.sendCommand("1,1")
+	} else {
+		postUpdate(RelayshieldRelay1LastOff, new DateTimeType())
+		RelayshieldRelayControl.sendCommand("1,0")
+	}
 end
 
 rule "Records last relay 2 on and off times"
 when
-  Item RelayshieldRelay2State received command
+	Item RelayshieldRelay2State received command
 then
 	if (receivedCommand == ON) {
-  		postUpdate(RelayshieldRelay2LastOn, new DateTimeType())
-  		RelayshieldRelayControl.sendCommand("2,1")
-  	} else {
-  		postUpdate(RelayshieldRelay2LastOff, new DateTimeType())
-  		RelayshieldRelayControl.sendCommand("2,0")
-  	}
+		postUpdate(RelayshieldRelay2LastOn, new DateTimeType())
+		RelayshieldRelayControl.sendCommand("2,1")
+	} else {
+		postUpdate(RelayshieldRelay2LastOff, new DateTimeType())
+		RelayshieldRelayControl.sendCommand("2,0")
+	}
 end
 
 rule "Records last relay 3 on and off times"
 when
-  Item RelayshieldRelay3State received command
+	Item RelayshieldRelay3State received command
 then
 	if (receivedCommand == ON) {
-  		postUpdate(RelayshieldRelay3LastOn, new DateTimeType())
-  		RelayshieldRelayControl.sendCommand("3,1")
-  	} else {
-  		postUpdate(RelayshieldRelay3LastOff, new DateTimeType())
-  		RelayshieldRelayControl.sendCommand("3,0")
-  		
-  	}
+		postUpdate(RelayshieldRelay3LastOn, new DateTimeType())
+		RelayshieldRelayControl.sendCommand("3,1")
+	} else {
+		postUpdate(RelayshieldRelay3LastOff, new DateTimeType())
+		RelayshieldRelayControl.sendCommand("3,0")
+	}
 end
 
 rule "Records last relay 4 on and off times"
 when
-  Item RelayshieldRelay4State received command
+ 	Item RelayshieldRelay4State received command
 then
 	if (receivedCommand == ON) {
-  		postUpdate(RelayshieldRelay4LastOn, new DateTimeType())
-  		RelayshieldRelayControl.sendCommand("4,1")
-  	} else {
-  		postUpdate(RelayshieldRelay4LastOff, new DateTimeType())
-  		RelayshieldRelayControl.sendCommand("4,0")
-  	}
+		postUpdate(RelayshieldRelay4LastOn, new DateTimeType())
+		RelayshieldRelayControl.sendCommand("4,1")
+	} else {
+		postUpdate(RelayshieldRelay4LastOff, new DateTimeType())
+		RelayshieldRelayControl.sendCommand("4,0")
+	}
 end
+
+//rule "Switch relay 1 on daily at 2130"
+//when
+//	Time cron "0 30 21 * * ?"
+//then
+//	RelayshieldRelay1State.sendCommand(ON)
+//end
+
+//rule "Switch relay 4 on daily at 2200"
+//when
+//	Time cron "0 0 22 * * ?"
+//then
+//	RelayshieldRelay4State.sendCommand(ON)
+//end
+
+//rule "Switch relay 1 off daily at 0000"
+//when
+//	Time cron "0 0 0 * * ?"
+//then
+//	RelayshieldRelay1State.sendCommand(OFF)
+//end
+
+//rule "Switch relays 1 and 4 off daily at 0800"
+//when
+//	Time cron "0 0 8 * * ?"
+//then
+//	RelayshieldRelay1State.sendCommand(OFF)
+//	RelayshieldRelay4State.sendCommand(OFF)
+//end
