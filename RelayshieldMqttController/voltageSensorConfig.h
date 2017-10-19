@@ -32,7 +32,6 @@ PGM_P const VOLTAGE_MEASUREMENT_TOPICS[] PROGMEM = {
     VOLTAGE_MEASUREMENT_TOPIC,     // idx = 0
 };
 
-/* STATUS_TOPICS indices, must match table above */
 typedef enum {
   VOLTAGE_MEASUREMENT_TOPIC_IDX = 0,
 } voltage_measurement_topics;
